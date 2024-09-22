@@ -1,0 +1,17 @@
+pkgbase = ttf-explex-hs
+	pkgdesc = A composite font of 0xProto and IBM Plex Sans JP (hidden full-width space version)
+	pkgver = 0.0.3
+	pkgrel = 1
+	url = https://github.com/yuru7/Explex
+	arch = any
+	license = custom:OFL
+	makedepends = fontforge
+	makedepends = python-setuptools
+	makedepends = python-fonttools
+	makedepends = python-ttfautohint-py
+	provides = ttf-font
+	provides = ttf-explex
+	source = git+https://github.com/yuru7/Explex.git#tag=v0.0.3
+	sha256sums = SKIP
+
+pkgname = ttf-explex-hs

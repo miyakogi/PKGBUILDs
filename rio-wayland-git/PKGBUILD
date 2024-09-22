@@ -1,0 +1,64 @@
+# Maintainer:  miyaco <miyako.dev@gmail.com>
+# Based on the rio PKGBUILD on Arch's official repository
+
+pkgbase=rio
+pkgname=('rio-waylnad-git')
+pkgver=v0.1.15.r20.gdfba312e3
+pkgrel=1
+pkgdesc="A hardware-accelerated GPU terminal emulator powered by WebGPU"
+arch=('x86_64')
+url="https://github.com/raphamorim/${pkgbase}"
+license=('MIT')
+# https://raphamorim.io/rio/install/#arch-linux
+depends=(
+  'gcc-libs'
+  'fontconfig'
+  'freetype2'
+  'glibc'
+  'ncurses'
+)
+makedepends=(
+  'cargo'
+  'desktop-file-utils'
+  'libxcb'
+  'libxkbcommon'
+  'python'
+)
+provides=('rio')
+conflicts=('rio')
+source=("git+${url}")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd "${pkgbase}"
+  git describe --tags --match 'v*' | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+  cd "${pkgbase}"
+  cargo fetch --locked --target "${CARCH}-unknown-linux-gnu"
+}
+
+build() {
+  cd "${pkgbase}"
+  # cargo build --frozen --release --all-features
+  env RUSTFLAGS='-C link-arg=-s' cargo build --release --no-default-features --features=wayland
+}
+
+check() {
+  cd "${pkgbase}"
+  cargo test --frozen --workspace
+}
+
+package_rio-waylnad-git() {
+
+  cd "${pkgbase}"
+  install -Dm0755 "target/release/${pkgbase}" -t "${pkgdir}/usr/bin/"
+  install -Dm0644 "README.md" -t "${pkgdir}/usr/share/doc/${pkgbase}/"
+  install -Dm0644 "LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgbase}/"
+  desktop-file-install -m 644 "misc/${pkgbase}.desktop" --dir "${pkgdir}/usr/share/applications/"
+  install -Dm0644 "docs/static/assets/${pkgbase}-logo.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/${pkgbase}.svg"
+}
+
+# vim: ts=2 sw=2 et:
+

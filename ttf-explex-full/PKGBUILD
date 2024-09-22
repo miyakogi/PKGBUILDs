@@ -1,0 +1,78 @@
+# Maintainer: miyaco <miyako.dev@gmail.com>
+
+pkgname='ttf-explex-full'
+pkgver=0.0.3
+pkgrel=1
+pkgdesc='A composite font of 0xProto and IBM Plex Sans JP (hidden full-width space variant)'
+arch=('any')
+url='https://github.com/yuru7/Explex'
+license=('custom:OFL')
+provides=('ttf-font' 'ttf-explex' 'ttf-explex-hs')
+conflicts=('ttf-explex')
+makedepends=(
+  'fontforge'
+  'python-setuptools'
+  'python-fonttools'
+  'python-ttfautohint-py'
+)
+source=("git+${url}.git#tag=v${pkgver}")
+sha256sums=('SKIP')
+
+build() {
+  cd Explex
+
+  python fontforge_script.py
+  python fonttools_script.py
+  mv build "Explex"
+
+  python fontforge_script.py --35
+  python fonttools_script.py
+  mv build "Explex_35"
+
+  python fontforge_script.py --console
+  python fonttools_script.py
+  mv build "Explex_Console"
+
+  python fontforge_script.py --console --35
+  python fonttools_script.py
+  mv build "Explex_35Console"
+
+  python fontforge_script.py --console --nerd-font
+  python fonttools_script.py
+  mv build "Explex_Console_NF"
+
+  python fontforge_script.py --console --nerd-font --35
+  python fonttools_script.py
+  mv build "Explex_35Console_NF"
+
+  python fontforge_script.py --hidden-zenkaku-space
+  python fonttools_script.py
+  mv build "Explex_HS"
+
+  python fontforge_script.py --hidden-zenkaku-space --35
+  python fonttools_script.py
+  mv build "Explex_35HS"
+
+  python fontforge_script.py --hidden-zenkaku-space --console
+  python fonttools_script.py
+  mv build "Explex_HS_Console"
+
+  python fontforge_script.py --hidden-zenkaku-space --console --35
+  python fonttools_script.py
+  mv build "Explex_35HS_Console"
+
+  python fontforge_script.py --hidden-zenkaku-space --console --nerd-font
+  python fonttools_script.py
+  mv build "Explex_HS_Console_NF"
+
+  python fontforge_script.py --hidden-zenkaku-space --console --nerd-font --35
+  python fonttools_script.py
+  mv build "Explex_35HS_Console_NF"
+}
+
+package() {
+  cd Explex
+  install -d "${pkgdir}/usr/share/fonts/TTF"
+  find Explex* -type f -name '*.ttf' -exec install -Dm644 {} -t "${pkgdir}/usr/share/fonts/TTF" \;
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

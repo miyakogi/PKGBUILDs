@@ -1,0 +1,23 @@
+pkgbase = rio
+	pkgdesc = A hardware-accelerated GPU terminal emulator powered by WebGPU
+	pkgver = v0.1.15.r20.gdfba312e3
+	pkgrel = 1
+	url = https://github.com/raphamorim/rio
+	arch = x86_64
+	license = MIT
+	makedepends = cargo
+	makedepends = desktop-file-utils
+	makedepends = libxcb
+	makedepends = libxkbcommon
+	makedepends = python
+	depends = gcc-libs
+	depends = fontconfig
+	depends = freetype2
+	depends = glibc
+	depends = ncurses
+	provides = rio
+	conflicts = rio
+	source = git+https://github.com/raphamorim/rio
+	sha512sums = SKIP
+
+pkgname = rio-waylnad-git
